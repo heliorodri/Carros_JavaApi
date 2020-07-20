@@ -2,9 +2,11 @@ package com.example.carros.domain;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CarroService {
@@ -16,13 +18,16 @@ public class CarroService {
         return rep.findAll();
     }
 
-    public List<Carro> getCarrosFake() {
-        List<Carro> carros = new ArrayList<>();
+    public Optional<Carro> getById(Long id) {
+        return rep.findById(id);
+    }
 
-        carros.add(new Carro(1L, "Focus"));
-        carros.add(new Carro(2L, "Fusion"));
-        carros.add(new Carro(3L, "Fiesta"));
+    public Iterable<Carro> getByTipo(String tipo) {
+        return rep.findByTipo(tipo);
+    }
 
-        return carros;
+    public String save(Carro carro) {
+        Carro c = rep.save(carro);
+        return "Carro salvo com sucesso! Id: " + c.getId();
     }
 }
