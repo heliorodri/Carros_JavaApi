@@ -37,9 +37,9 @@ public class CarrosController {
     }
 
     @PostMapping
-    public ResponseEntity post(@RequestBody Carro carro) {
+    public ResponseEntity<String> post(@RequestBody Carro carro) {
         Carro c = service.save(carro);
-        return (ResponseEntity) ResponseEntity.created(URI.create("Carro inserido com sucesso! Id: " + c.getId()));
+        return new ResponseEntity<String>("Carro criado com sucesso! id: " + c.getId(), HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")

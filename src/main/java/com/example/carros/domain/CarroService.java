@@ -19,8 +19,8 @@ public class CarroService {
         return rep.findAll().stream().map(CarroDTO::new).collect(Collectors.toList());
     }
 
-    public Optional<Carro> getById(Long id) {
-        return rep.findById(id);
+    public Optional<CarroDTO> getById(Long id) {
+        return rep.findById(id).map(CarroDTO::new);
     }
 
     public List<CarroDTO> getByTipo(String tipo) {
@@ -34,9 +34,9 @@ public class CarroService {
      public Carro update(Carro carro, Long id) {
         Assert.notNull(id, "Não foi possível inserir o registro!");
 
-        Optional<Carro> oCar = getById(id);
+        Optional<CarroDTO> oCar = getById(id);
         if(oCar.isPresent()){
-            Carro dbCar = oCar.get();
+            Carro dbCar = new Carro();
             dbCar.setNome(carro.getNome());
             dbCar.setTipo(carro.getTipo());
 
