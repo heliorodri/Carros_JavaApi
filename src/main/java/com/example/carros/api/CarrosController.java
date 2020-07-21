@@ -2,15 +2,14 @@ package com.example.carros.api;
 
 import com.example.carros.domain.Carro;
 import com.example.carros.domain.CarroService;
+import com.example.carros.domain.dto.CarroDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.net.ssl.HttpsURLConnection;
 import java.net.URI;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1/carros")
@@ -19,18 +18,18 @@ public class CarrosController {
     private CarroService service;
 
     @GetMapping()
-    public ResponseEntity<Iterable<Carro>> get() {
+    public ResponseEntity get() {
         return ResponseEntity.ok(service.getCarros());
     }
 
     @GetMapping("/{id}")
     public ResponseEntity getById(@PathVariable("id") Long id) {
-        return service.getById(id).map(c -> ResponseEntity.ok(c)).orElse(ResponseEntity.notFound().build());
+        return service.getById(id).map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
     }
 
     @GetMapping("/tipo/{tipo}")
     public ResponseEntity getByTipo(@PathVariable("tipo") String tipo) {
-        List<Carro> carros = service.getByTipo(tipo);
+        List<CarroDTO> carros = service.getByTipo(tipo);
 
         return carros.isEmpty() ?
                 ResponseEntity.notFound().build() :
