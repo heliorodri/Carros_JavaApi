@@ -30,8 +30,20 @@ public class CarrosController {
     }
 
     @PostMapping
-    public void post(@RequestBody Carro carro) {
-        service.save(carro);
+    public String post(@RequestBody Carro carro) {
+        return service.save(carro);
+    }
+
+    @PutMapping("/{id}")
+    public String put(@PathVariable("id") Long id, @RequestBody Carro carro){
+        Carro c = service.update(carro, id);
+        return "Carro atualizado com sucesso! Id: " + c.getId();
+    }
+
+    @DeleteMapping("/{id}")
+    public String delete(@PathVariable("id") Long id){
+        service.delete(id);
+        return "Carro removido com sucesso!";
     }
 
 }
