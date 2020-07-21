@@ -3,8 +3,12 @@ package com.example.carros.api;
 import com.example.carros.domain.Carro;
 import com.example.carros.domain.CarroService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.net.ssl.HttpsURLConnection;
+import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 
@@ -13,37 +17,42 @@ import java.util.Optional;
 public class CarrosController {
     @Autowired
     private CarroService service;
-    
+
     @GetMapping()
-    public Iterable<Carro> get() {
-        return service.getCarros();
+    public ResponseEntity<Iterable<Carro>> get() {
+        return ResponseEntity.ok(service.getCarros());
     }
 
     @GetMapping("/{id}")
-    public Optional<Carro> getById(@PathVariable("id") Long id){
-        return service.getById(id);
+    public ResponseEntity getById(@PathVariable("id") Long id) {
+        return service.getById(id).map(c -> ResponseEntity.ok(c)).orElse(ResponseEntity.notFound().build());
     }
 
     @GetMapping("/tipo/{tipo}")
-    public Iterable<Carro> getByTipo(@PathVariable("tipo") String tipo) {
-        return service.getByTipo(tipo);
+    public ResponseEntity getByTipo(@PathVariable("tipo") String tipo) {
+        List<Carro> carros = service.getByTipo(tipo);
+
+        return carros.isEmpty() ?
+                ResponseEntity.notFound().build() :
+                ResponseEntity.ok(carros);
     }
 
     @PostMapping
-    public String post(@RequestBody Carro carro) {
-        return service.save(carro);
+    public ResponseEntity post(@RequestBody Carro carro) {
+        Carro c = service.save(carro);
+        return (ResponseEntity) ResponseEntity.created(URI.create("Carro inserido com sucesso! Id: " + c.getId()));
     }
 
     @PutMapping("/{id}")
-    public String put(@PathVariable("id") Long id, @RequestBody Carro carro){
+    public ResponseEntity<String> put(@PathVariable("id") Long id, @RequestBody Carro carro) {
         Carro c = service.update(carro, id);
-        return "Carro atualizado com sucesso! Id: " + c.getId();
+        return new ResponseEntity<>("Carro atualizado com sucesso! Id: " + c.getId(), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
-    public String delete(@PathVariable("id") Long id){
+    public ResponseEntity<String> delete(@PathVariable("id") Long id) {
         service.delete(id);
-        return "Carro removido com sucesso!";
+        return new ResponseEntity<>("Carro removido com sucesso!", HttpStatus.OK);
     }
 
 }
