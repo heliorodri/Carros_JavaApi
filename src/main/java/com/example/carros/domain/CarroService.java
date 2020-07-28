@@ -33,7 +33,7 @@ public class CarroService {
         return cReturn;
     }
 
-     public Carro update(Carro carro, Long id) {
+     public CarroDTO update(Carro carro, Long id) {
         Assert.notNull(id, "Não foi possível atualizar o registro!");
 
         Optional<CarroDTO> oCar = getById(id);
@@ -43,9 +43,9 @@ public class CarroService {
             dbCar.setTipo(carro.getTipo());
 
             rep.save(dbCar);
-            return dbCar;
+            return CarroDTO.create(dbCar);
         }
-        else throw new RuntimeException("Não foi possível atualizar o registro!");
+        else return null;
     }
 
     public void delete(Long id) {
