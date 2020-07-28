@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 import java.util.List;
@@ -37,9 +38,19 @@ public class CarrosController {
     }
 
     @PostMapping
-    public ResponseEntity<String> post(@RequestBody Carro carro) {
-        Carro c = service.save(carro);
-        return new ResponseEntity<String>("Carro criado com sucesso! id: " + c.getId(), HttpStatus.CREATED);
+    public ResponseEntity post(@RequestBody Carro carro) {
+        try{
+            CarroDTO c = service.save(carro);
+            URI location = getURI(c.getId());
+
+            return ResponseEntity.created(location).build();
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    private URI getURI(Long id){
+        return ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(id).toUri();
     }
 
     @PutMapping("/{id}")
