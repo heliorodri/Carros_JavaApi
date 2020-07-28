@@ -48,10 +48,12 @@ public class CarroService {
         else return null;
     }
 
-    public void delete(Long id) {
+    public boolean delete(Long id) {
         Optional<Carro> oCar = rep.findById(id);
         if(oCar.isPresent()){
             rep.deleteById(id);
-        }
+            return true;
+        } else
+            return false;
     }
 }
