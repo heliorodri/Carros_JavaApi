@@ -5,6 +5,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import lombok.*;
+import org.hibernate.annotations.common.reflection.XProperty;
 
 @Entity
 @Data
@@ -14,4 +15,11 @@ public class Carro {
     private Long id;
     private String nome;
     private String tipo;
+    private String descricao;
+    private String url_foto;
+    private String url_video;
+    private String latitude;
+    private String longitude;
+
+
 }
