@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 
 @SpringBootTest
-class CarrosApplicationTests {
+class CarroServiceTests {
 
 	@Autowired
 	private CarroService service;
