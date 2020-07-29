@@ -2,8 +2,10 @@ package com.example.carros;
 
 import com.example.carros.api.CarrosController;
 import com.example.carros.domain.Carro;
+import com.example.carros.domain.CarroService;
 import com.example.carros.domain.dto.CarroDTO;
 import org.junit.jupiter.api.Test;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
@@ -11,6 +13,7 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.net.ssl.HttpsURLConnection;
 import java.util.List;
@@ -18,11 +21,15 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+@RunWith(SpringRunner.class)
 @SpringBootTest(classes = CarrosApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class CarroAPITest {
 
     @Autowired
     protected TestRestTemplate rest;
+
+    @Autowired
+    private CarroService service;
 
     private ResponseEntity<CarroDTO> getCarro(String url){
         return rest.getForEntity(url, CarroDTO.class);
@@ -55,7 +62,7 @@ class CarroAPITest {
     //testar a busca de um unico registro (id = 11)
     @Test
     public void testGet() {
-        ResponseEntity<CarroDTO> response = getCarro("/api/v1/carro/11");
+        ResponseEntity<CarroDTO> response = getCarro("/api/v1/carros/11");
         assertEquals(response.getStatusCode(), HttpStatus.OK);
 
         CarroDTO carro = response.getBody();
