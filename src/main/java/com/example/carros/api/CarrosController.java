@@ -25,7 +25,7 @@ public class CarrosController {
 
     @GetMapping("/{id}")
     public ResponseEntity getById(@PathVariable("id") Long id) {
-        return service.getById(id).map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
+        return service.getById(id).map(ResponseEntity::ok).orElse(ResponseEntity.noContent().build());
     }
 
     @GetMapping("/tipo/{tipo}")
@@ -33,14 +33,14 @@ public class CarrosController {
         List<CarroDTO> carros = service.getByTipo(tipo);
 
         return carros.isEmpty() ?
-                ResponseEntity.notFound().build() :
+                ResponseEntity.noContent().build() :
                 ResponseEntity.ok(carros);
     }
 
     @PostMapping
     public ResponseEntity post(@RequestBody Carro carro) {
         try{
-            CarroDTO c = service.save(carro);
+            CarroDTO c = service.insert(carro);
             URI location = getURI(c.getId());
 
             return ResponseEntity.created(location).build();
