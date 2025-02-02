@@ -1,9 +1,8 @@
 package com.example.carros;
 
-import com.example.carros.api.CarrosController;
-import com.example.carros.domain.Carro;
-import com.example.carros.domain.CarroService;
-import com.example.carros.domain.dto.CarroDTO;
+import com.example.carros.domain.Car;
+import com.example.carros.domain.CarService;
+import com.example.carros.domain.dto.CarDTO;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +14,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import javax.net.ssl.HttpsURLConnection;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -29,19 +27,19 @@ class CarroAPITest {
     protected TestRestTemplate rest;
 
     @Autowired
-    private CarroService service;
+    private CarService service;
 
-    private ResponseEntity<CarroDTO> getCarro(String url){
-        return rest.getForEntity(url, CarroDTO.class);
+    private ResponseEntity<CarDTO> getCarro(String url){
+        return rest.getForEntity(url, CarDTO.class);
     }
-    private ResponseEntity<List<CarroDTO>> getCarros(String url){
-        return rest.exchange(url, HttpMethod.GET, null, new ParameterizedTypeReference<List<CarroDTO>>() {});
+    private ResponseEntity<List<CarDTO>> getCarros(String url){
+        return rest.exchange(url, HttpMethod.GET, null, new ParameterizedTypeReference<List<CarDTO>>() {});
     }
 
     //testar se os registros foram inseridos
     @Test
     public void testLista(){
-        List<CarroDTO> carros = getCarros("/api/v1/carros").getBody();
+        List<CarDTO> carros = getCarros("/api/v1/carros").getBody();
 
         assertNotNull(carros);
         assertEquals(30, carros.size());
@@ -62,11 +60,11 @@ class CarroAPITest {
     //testar a busca de um unico registro (id = 11)
     @Test
     public void testGet() {
-        ResponseEntity<CarroDTO> response = getCarro("/api/v1/carros/11");
+        ResponseEntity<CarDTO> response = getCarro("/api/v1/carros/11");
         assertEquals(response.getStatusCode(), HttpStatus.OK);
 
-        CarroDTO carro = response.getBody();
-        assertEquals("Ferrari FF", carro.getNome());
+        CarDTO carro = response.getBody();
+        assertEquals("Ferrari FF", carro.getName());
     }
 
     //testar NOT_FOUND
@@ -79,7 +77,7 @@ class CarroAPITest {
     //testar metodo save
     @Test
     public void save() {
-        Carro c = new Carro();
+        Car c = new Car();
         c.setNome("Kombi");
         c.setTipo("classicos");
 
@@ -92,10 +90,10 @@ class CarroAPITest {
 
         //buscar o registro e comparar valores
         String location = response.getHeaders().get("location").get(0);
-        CarroDTO car = getCarro(location).getBody();
+        CarDTO car = getCarro(location).getBody();
 
-        assertEquals(c.getNome(), car.getNome());
-        assertEquals(c.getTipo(), car.getTipo());
+        assertEquals(c.getNome(), car.getName());
+        assertEquals(c.getTipo(), car.getType());
 
         //deletar registro
         rest.delete(location);

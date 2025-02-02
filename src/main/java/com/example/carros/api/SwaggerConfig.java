@@ -27,9 +27,9 @@ public class SwaggerConfig {
 
     private ApiInfo apiInfo(){
         return new ApiInfoBuilder()
-                .contact(new Contact("Hélio Rodrigues","","heliojr97@gmail.com"))
-                .title("Primeira API - Carros")
-                .description("Documentação API carros")
+                .contact(new Contact("Hélio Rodrigues","","heliojrrodri@gmail.com"))
+                .title("Cars")
+                .description("Cars API Docs")
                 .version("1.0")
                 .build();
     }

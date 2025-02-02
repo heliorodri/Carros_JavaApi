@@ -9,7 +9,7 @@ public class IndexController {
     
     @GetMapping()
     public String get(){
-        return "API Carros";
+        return "This is the Cars API";
     }
 
 }
